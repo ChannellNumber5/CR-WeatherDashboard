@@ -8,3 +8,6 @@ Resources
 - (BootStrap Card Component)[https://getbootstrap.com/docs/5.1/components/card/]
 
 - (Bootstrap Horizontal Card Component)[https://getbootstrap.com/docs/4.3/components/card/#horizontal]
+
+- (UV Index Guide)[https://www.epa.gov/sites/default/files/documents/uviguide.pdf]
+Specifically, page 3.

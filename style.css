@@ -1,0 +1,19 @@
+.UVI_low {
+    background-color: green;
+}
+
+.UVI_mod {
+    background-color: yellow;
+}
+
+.UVI_high {
+    background-color: orange;
+}
+
+.UVI_veryHigh {
+    background-color: red;
+}
+
+.UVI_extreme {
+    background-color: fuchsia;
+}
