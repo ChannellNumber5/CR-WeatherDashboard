@@ -8,11 +8,31 @@
         <title>CR's Weather Dashboard</title>
     </head>
     <body>
+        <div id="pageTitle">
+            <h1>Weather Dashboard Tool</h1>
+        </div>
+        
         <div class="row container-fluid p-0">
-            <div class=" col-4 queryContainer">
-            <!-- Empty Space for query container and search history -->
+            <div class=" col-3 queryContainer">
+              <div class="mb-3">
+                  <label for="cityInput" class="form-label"><h4>Input City Name:</h4></label>
+                  <input type="text" class="form-control" id="cityInput">
+              </div>
+              <div class="mb-3">
+                  <label for="stateInput" class="form-label"><h4>Input State Code (USA only):</h4></label>
+                  <input type="text" class="form-control" id="stateInput" placeholder="WA, CO, MD, TN, CA, etc.">
+              </div>
+              <div class="mb-3">
+                <label for="stateInput" class="form-label"><h4>Input Country:</h4></label>
+                <input type="text" class="form-control" id="countryInput">
             </div>
-            <div class="col-8 dataContainer">
+            <button type="button" class="btn btn-outline-secondary container-fluid" id="searchButton">Search</button>
+            <div class="searchHistory">
+                <h4>Search History: </h4>
+            <!-- Empty Space for search history buttons -->
+            </div>
+            </div>
+            <div class="col-9 dataContainer">
                 <div class="row container-fluid p-0 currentWeather">
                 <!-- Empty Div for Current weather -->
                 </div>

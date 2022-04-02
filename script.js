@@ -1,10 +1,27 @@
 var ApiKey = "190910d9af2f002bd85f0e8b3e897c63";
-var city = "seattle";
-var stateCode = "WA";
-var country = "USA";
+var cityName;
+// var stateCode = "WA";
+// var country = "USA";
 var currentWeatherDiv = document.querySelector(".currentWeather");
+var searchButton = document.querySelector("#searchButton");
 
-function getWeatherApi() {
+function init() {
+    searchButton.addEventListener("click", function(event){
+        let cityInput = document.querySelector("#cityInput");
+        let stateInput = document.querySelector("#stateInput");
+        let countryInput = document.querySelector("#countryInput");
+        let city = cityInput.value.trim();
+        let state = stateInput.value.trim();
+        let country = countryInput.value.trim();
+        getWeatherApi(city, state, country);
+        cityInput.value = "";
+        stateInput.value = "";
+        countryInput.value = "";
+    })
+}
+
+
+function getWeatherApi(city, stateCode, country) {
 
     var fetchUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + stateCode + "," + country + "&appid=" + ApiKey;
 
@@ -18,6 +35,7 @@ function getWeatherApi() {
             console.log(data[0].lon);
             var lat = data[0].lat;
             var lon = data[0].lon;
+            cityName = data[0].name;
 
     
             //object keys needed: city, weather icon, date, temp, windspeed, humidity, UV-index with color corresponding block/button
@@ -62,17 +80,19 @@ function getForecastApi(latInput, lonInput) {
             headerEl.setAttribute("class", "card-title");
             var timeStamp = forecastData.current.dt * 1000;
             var date = new Date(timeStamp);
-            headerEl.textContent = city + " " + "("+ (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + ")";
+            headerEl.textContent = cityName + " " + "("+ (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + ")";
             cardBody.appendChild(headerEl);
             var paraEl = document.createElement("p");
             paraEl.setAttribute("class", "card-text");
+            if (forecastData.alerts[0].description) {
             paraEl.textContent = forecastData.alerts[0].description;
             cardBody.appendChild(paraEl);
+            }
             var currentTempEl = document.createElement("p");
             var cTSmallEl = document.createElement("small");
             cTSmallEl.setAttribute("class", "text-muted");
             currentTempEl.setAttribute("class", "card-text");
-            currentTempEl.textContent = "Temp: " + Math.floor(((5/9) * (forecastData.current.temp - 273)) + 32) + " \xB0" + "F";
+            currentTempEl.textContent = "Current Temp: " + Math.floor(((9/5) * (forecastData.current.temp - 273)) + 32) + " \xB0" + "F";
             currentTempEl.appendChild(cTSmallEl);
             var windSpeedEl = document.createElement("p");
             windSpeedEl.setAttribute("class", "card-text");
@@ -138,11 +158,11 @@ function createForecastCards(data) {
         forecastBody.setAttribute("class", "card-body");
         var minTempEl = document.createElement("p");
         minTempEl.setAttribute("class", "card-text");
-        minTempEl.textContent = "Temp Low: " + Math.floor(((5/9) * (data[i].temp.min - 273)) + 32) + " \xB0" + "F";
+        minTempEl.textContent = "Temp Low: " + Math.floor(((9/5) * (data[i].temp.min - 273)) + 32) + " \xB0" + "F";
         forecastBody.appendChild(minTempEl);
         var maxTempEl = document.createElement("p");
         maxTempEl.setAttribute("class", "card-text");
-        maxTempEl.textContent = "Temp High: " + Math.floor(((5/9) * (data[i].temp.max - 273)) + 32) + " \xB0" + "F";
+        maxTempEl.textContent = "Temp High: " + Math.floor(((9/5) * (data[i].temp.max - 273)) + 32) + " \xB0" + "F";
         forecastBody.appendChild(maxTempEl);
         var windEl = document.createElement("p");
         windEl.setAttribute("class", "card-text");
@@ -155,12 +175,8 @@ function createForecastCards(data) {
         forecastCard.appendChild(forecastBody);
         forecastedWeatherEl.appendChild(forecastCard);
     }
-            // let temp = data.main.temp;
-            // let windSpeed = data.weather.wind.speed;
-            // let humidity = data.main.humidity;
-            // let icon = data.main.icon;
-            //object keys needed: date, weather icon, temp, windspeed, humidity
 }
 
 
-getWeatherApi();
+// getWeatherApi();
+init();
