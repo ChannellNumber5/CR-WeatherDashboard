@@ -2,7 +2,7 @@ var ApiKey = "190910d9af2f002bd85f0e8b3e897c63";
 var city = "seattle";
 var stateCode = "WA";
 var country = "USA";
-var currentWeatherDiv = document.querySelector(".container");
+var currentWeatherDiv = document.querySelector(".currentWeather");
 
 function getWeatherApi() {
 
@@ -82,10 +82,20 @@ function getForecastApi(latInput, lonInput) {
             hSmallEl.setAttribute("class", "text-muted");
             humidityEl.textContent = "Humidity: " + forecastData.current.humidity + "%";
             humidityEl.appendChild(hSmallEl);
-            // var UvIndex = forecastData.current.uvi;
+            var UvIndex = forecastData.current.uvi;
             var UvIndexEl = document.createElement("p");
             UvIndexEl.setAttribute("class", "card-text");
-            UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI'>" + forecastData.current.uvi + "</span>";
+            if (UvIndex < 3 ){
+                UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI_low'>" + UvIndex + "</span>";
+            } else if ( 3 <= UvIndex < 6) {
+                UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI_mod'>" + UvIndex + "</span>";
+            } else if ( 6 <= UvIndex < 8) {
+                UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI_high'>" + UvIndex + "</span>";
+            } else if ( 8 <= UvIndex < 11) {
+                UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI_veryHigh'>" + UvIndex + "</span>";
+            } else {
+                UvIndexEl.innerHTML = "UV Index: " + "<span class='UVI_extreme'>" + UvIndex + "</span>";
+            }
             var UvSmallEl = document.createElement("small");
             UvSmallEl.setAttribute("class", "text-muted");
             UvIndexEl.appendChild(UvSmallEl);

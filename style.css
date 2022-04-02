@@ -1,5 +1,8 @@
 .UVI_low {
     background-color: green;
+    padding: 0 1rem;
+    line-height: 1.5;
+    border-radius: 2px;
 }
 
 .UVI_mod {
