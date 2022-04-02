@@ -37,6 +37,10 @@ function getForecastApi(latInput, lonInput) {
         })
         .then(function (forecastData) {
             console.log(forecastData);
+            var currentWeather = forecastData.current;
+            var dailyWeatherForecast = forecastData.daily;
+            console.log(currentWeather);
+            console.log(dailyWeatherForecast);
             var currentCard = document.createElement("div");
             currentCard.setAttribute("class", "card mb-3");
             // currentCard.setAttribute("style", "max-width: 540px;");
@@ -108,12 +112,54 @@ function getForecastApi(latInput, lonInput) {
             currentCard.appendChild(cardContent);
             currentWeatherDiv.appendChild(currentCard);
 
+            createForecastCards(dailyWeatherForecast);
+        });
+}
+
+function createForecastCards(data) {
+    var forecastedWeatherEl = document.querySelector(".forecastedWeather");
+    var forecastHeader = document.createElement("h4");
+    forecastHeader.textContent = "5 Day Weather Forecast:"
+    forecastedWeatherEl.appendChild(forecastHeader);
+    for (var i = 0; i < 5; i++) {
+        var forecastCard = document.createElement("div");
+        forecastCard.setAttribute("class", "card col");
+        var forecastDateEl = document.createElement("h6");
+        var forecastTime = data[i].dt * 1000;
+        var forecastDate = new Date(forecastTime);
+        forecastDateEl.textContent = "("+ (forecastDate.getMonth() + 1) + "/" + forecastDate.getDate() + "/" + forecastDate.getFullYear() + ")";
+        forecastCard.appendChild(forecastDateEl);
+        var forecastImg = document.createElement("img");
+        forecastImg.setAttribute("class", "card-img-top");
+        var imgCode = data[i].weather[0].icon;
+        forecastImg.setAttribute("src", "http://openweathermap.org/img/wn/"+ imgCode + "@2x.png");
+        forecastCard.appendChild(forecastImg);
+        var forecastBody = document.createElement("div");
+        forecastBody.setAttribute("class", "card-body");
+        var minTempEl = document.createElement("p");
+        minTempEl.setAttribute("class", "card-text");
+        minTempEl.textContent = "Temp Low: " + Math.floor(((5/9) * (data[i].temp.min - 273)) + 32) + " \xB0" + "F";
+        forecastBody.appendChild(minTempEl);
+        var maxTempEl = document.createElement("p");
+        maxTempEl.setAttribute("class", "card-text");
+        maxTempEl.textContent = "Temp High: " + Math.floor(((5/9) * (data[i].temp.max - 273)) + 32) + " \xB0" + "F";
+        forecastBody.appendChild(maxTempEl);
+        var windEl = document.createElement("p");
+        windEl.setAttribute("class", "card-text");
+        windEl.textContent = "Wind: " + data[i].wind_speed + " MPH";
+        forecastBody.appendChild(windEl);
+        var hEl = document.createElement("p");
+        hEl.setAttribute("class", "card-text");
+        hEl.textContent = "Humidity: " + data[i].humidity + "%";
+        forecastBody.appendChild(hEl);
+        forecastCard.appendChild(forecastBody);
+        forecastedWeatherEl.appendChild(forecastCard);
+    }
             // let temp = data.main.temp;
             // let windSpeed = data.weather.wind.speed;
             // let humidity = data.main.humidity;
             // let icon = data.main.icon;
             //object keys needed: date, weather icon, temp, windspeed, humidity
-        });
 }
 
 
