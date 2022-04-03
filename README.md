@@ -13,3 +13,5 @@ Resources
 Specifically, page 3.
 
 - (Optional Chaining)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining]
+
+- (Removing Children from and Element in the DOM)[https://attacomsian.com/blog/javascript-dom-remove-all-children-of-an-element]

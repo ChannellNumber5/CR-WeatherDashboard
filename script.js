@@ -28,7 +28,7 @@ function getWeatherApi(city) {
             var lon = data[0].lon;
             let cityName = data[0].name;
             getForecastApi(lat, lon, cityName);
-            savesearch(accessStoredData(), cityName);
+            saveSearch(accessStoredData(), cityName);
         });
 }
 
@@ -171,22 +171,21 @@ function accessStoredData() {
     return searches;
 }
 
-function savesearch(searchArray, city) {
-    if(!searchArray) {
+function saveSearch(searchArray, city) {
+    if(searchArray == undefined) {
         searchArray = [];
         localStorage.setItem("savedSearches", JSON.stringify(searchArray));
         return;
     }
     let searchHistoryEl = document.querySelector(".searchHistory");
-    for (let i = 0; i < searchArray.length; i++){
-        if (searchArray[i] !== city) {
-            searchHistoryEl.appendChild(createButton(city));
-            searchArray.push(city);
-            localStorage.setItem("savedSearches", JSON.stringify(searchArray));
-        } else {
+    for (let i = 0; i < searchArray.length; i++) {
+        if (searchArray[i] == city) {
             return;
         }
     }
+    searchHistoryEl.appendChild(createButton(city));
+    searchArray.push(city);
+    localStorage.setItem("savedSearches", JSON.stringify(searchArray));
 
 }
 
@@ -209,6 +208,14 @@ function loadSearchHistory(searchArray) {
             getWeatherApi(searchCity);
         }
         return;
+    });
+
+    clearSearch.addEventListener("click", function() {
+        while (searchHistoryEl.lastChild) {
+            searchHistoryEl.removeChild(searchHistoryEl.lastChild);
+        }
+        let newArray = [];
+        localStorage.setItem("savedSearches", JSON.stringify(newArray));
     })
 }
 
