@@ -20,10 +20,9 @@ function init() {
     })
 }
 
-
 function getWeatherApi(city, stateCode, country) {
 
-    var fetchUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + stateCode + "," + country + "&appid=" + ApiKey;
+    var fetchUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + stateCode + "," + country + "&appid=" + ApiKey;
 
     fetch(fetchUrl)
         .then(function (response) {
@@ -37,23 +36,21 @@ function getWeatherApi(city, stateCode, country) {
             var lon = data[0].lon;
             cityName = data[0].name;
 
-    
-            //object keys needed: city, weather icon, date, temp, windspeed, humidity, UV-index with color corresponding block/button
             getForecastApi(lat,lon);
-            // for(let i = 0; i < data.length; i++) {
-
-            // }
         });
 }
 
-function getForecastApi(latInput, lonInput) {
+async function getForecastApi(latInput, lonInput) {
     var forecastUrl = "https://api.openweathermap.org/data/2.5/onecall?lat="+ latInput + "&lon=" + lonInput + "&appid=" + ApiKey;
 
-    fetch(forecastUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (forecastData) {
+    const response = await fetch(forecastUrl);
+    const forecastData = await response.json();
+    
+    // fetch(forecastUrl)
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    //     .then(function (forecastData) {
             console.log(forecastData);
             var currentWeather = forecastData.current;
             var dailyWeatherForecast = forecastData.daily;
@@ -61,7 +58,7 @@ function getForecastApi(latInput, lonInput) {
             console.log(dailyWeatherForecast);
             var currentCard = document.createElement("div");
             currentCard.setAttribute("class", "card mb-3");
-            // currentCard.setAttribute("style", "max-width: 540px;");
+         
             var cardContent = document.createElement("div");
             cardContent.setAttribute("class", "row no-gutters");
             var iconImgCode = forecastData.current.weather[0].icon;
@@ -69,7 +66,7 @@ function getForecastApi(latInput, lonInput) {
             imgDiv.setAttribute("class", "col-md-4")
             var iconImg = document.createElement("img");
             iconImg.setAttribute("class", "card-img");
-            iconImg.setAttribute("src", "http://openweathermap.org/img/wn/"+ iconImgCode + "@2x.png");
+            iconImg.setAttribute("src", "https://openweathermap.org/img/wn/"+ iconImgCode + "@2x.png");
             imgDiv.appendChild(iconImg);
             cardContent.appendChild(imgDiv);
             var cardBodyDiv = document.createElement("div");
@@ -84,7 +81,7 @@ function getForecastApi(latInput, lonInput) {
             cardBody.appendChild(headerEl);
             var paraEl = document.createElement("p");
             paraEl.setAttribute("class", "card-text");
-            if (forecastData.alerts[0].description) {
+            if (forecastData?.alerts?.length > 0) {
             paraEl.textContent = forecastData.alerts[0].description;
             cardBody.appendChild(paraEl);
             }
@@ -133,7 +130,7 @@ function getForecastApi(latInput, lonInput) {
             currentWeatherDiv.appendChild(currentCard);
 
             createForecastCards(dailyWeatherForecast);
-        });
+        // });
 }
 
 function createForecastCards(data) {
@@ -152,7 +149,7 @@ function createForecastCards(data) {
         var forecastImg = document.createElement("img");
         forecastImg.setAttribute("class", "card-img-top");
         var imgCode = data[i].weather[0].icon;
-        forecastImg.setAttribute("src", "http://openweathermap.org/img/wn/"+ imgCode + "@2x.png");
+        forecastImg.setAttribute("src", "https://openweathermap.org/img/wn/"+ imgCode + "@2x.png");
         forecastCard.appendChild(forecastImg);
         var forecastBody = document.createElement("div");
         forecastBody.setAttribute("class", "card-body");
@@ -177,6 +174,20 @@ function createForecastCards(data) {
     }
 }
 
+function accessStoredData() {
+    const savedSearches = JSON.parse(localStorage.getItem("savedSearches"));
+    if(!savedSearches) {
+        return;
+    }
+    let searches = [];
+    for(let i = 0; i < savedSearches.length; i++) {
+        searches.push(savedSearches[i]);
+    }
+    return searches;
+}
 
-// getWeatherApi();
+function savesearch() {
+
+}
+
 init();
