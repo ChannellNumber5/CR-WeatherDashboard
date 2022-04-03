@@ -28,7 +28,7 @@ function getWeatherApi(city) {
             var lon = data[0].lon;
             let cityName = data[0].name;
             getForecastApi(lat, lon, cityName);
-            savesearch(accessStoredData(),cityName);
+            savesearch(accessStoredData(), cityName);
         });
 }
 
@@ -120,7 +120,6 @@ async function getForecastApi(latInput, lonInput, cityName) {
 
 function createForecastCards(data) {
     var forecastedWeatherEl = document.querySelector(".forecastedWeather");
-    forecastedWeatherEl = "";
     var forecastHeader = document.createElement("h4");
     forecastHeader.textContent = "5 Day Weather Forecast:"
     forecastedWeatherEl.appendChild(forecastHeader);
@@ -172,26 +171,40 @@ function accessStoredData() {
     return searches;
 }
 
-function savesearch(searchArray, cityName) {
+function savesearch(searchArray, city) {
+    if(!searchArray) {
+        searchArray = [];
+        localStorage.setItem("savedSearches", JSON.stringify(searchArray));
+        return;
+    }
     let searchHistoryEl = document.querySelector(".searchHistory");
-    searchHistoryEl.appendChild(createButton(cityName));
-    searchArray.push(cityName);
+    for (let i = 0; i < searchArray.length; i++){
+        if (searchArray[i] !== city) {
+            searchHistoryEl.appendChild(createButton(city));
+            searchArray.push(city);
+            localStorage.setItem("savedSearches", JSON.stringify(searchArray));
+        } else {
+            return;
+        }
+    }
+
 }
 
 function loadSearchHistory(searchArray) {
-    if (!searchArray) {
+    if (searchArray === []) {
         return;
     }
     const searchHistoryEl = document.querySelector(".searchHistory");
-    for (let i =0; i < searchArray.length; i++) {      
+    for (let i = 0; i < searchArray.length; i++) {      
         let city = searchArray[i];      
         searchHistoryEl.appendChild(createButton(city));
     }
     const clearSearch = createButton("Clear Search");
-    searchHistoryEl.appendChild(clearSearch);
+    let deleteButtonEl = document.querySelector(".clearSearch");
+    deleteButtonEl.appendChild(clearSearch);
 
     searchHistoryEl.addEventListener("click", function(event) {
-        if (event.target.hasClass("button")) {
+        if (event.target.hasAttribute("class", "btn")) {
             let searchCity = event.target.id;
             getWeatherApi(searchCity);
         }
@@ -201,13 +214,11 @@ function loadSearchHistory(searchArray) {
 
 function createButton(buttonName) {
     let newButton = document.createElement("button");
-    newButton.setAttribute("class","btn btn-outline-secondary container-fluid");
+    newButton.setAttribute("class", "btn btn-outline-secondary container-fluid");
     newButton.setAttribute("id", buttonName);
     newButton.setAttribute("type","button");
     newButton.textContent = buttonName;
     return newButton;
 }
-
-
 
 init();
