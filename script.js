@@ -190,7 +190,7 @@ function saveSearch(searchArray, city) {
 }
 
 function loadSearchHistory(searchArray) {
-    if (searchArray === []) {
+    if (searchArray === [] || !searchArray) {
         return;
     }
     const searchHistoryEl = document.querySelector(".searchHistory");
