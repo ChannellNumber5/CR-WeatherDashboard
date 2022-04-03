@@ -11,3 +11,5 @@ Resources
 
 - (UV Index Guide)[https://www.epa.gov/sites/default/files/documents/uviguide.pdf]
 Specifically, page 3.
+
+- (Optional Chaining)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining]
